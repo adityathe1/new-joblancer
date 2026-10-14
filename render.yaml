@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: joblancer
+    runtime: node
+    plan: starter            # a paid plan is needed so the database disk is kept between deploys
+    buildCommand: "echo no build step"
+    startCommand: node server.js
+    healthCheckPath: /healthz
+    disk:
+      name: joblancer-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: NODE_ENV
+        value: production
+      - key: DB_PATH
+        value: /var/data/joblancer.db
+      - key: APP_SECRET
+        generateValue: true
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      # Test deployment settings. Change these before taking real users or real money (see README).
+      - key: PAYMENTS
+        value: mock
+      - key: ALLOW_MOCK_PAYMENTS
+        value: "1"
+      - key: DEV_OTP
+        value: "1"
+      - key: PAN_AUTO_APPROVE
+        value: "0"
