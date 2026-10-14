@@ -1,29 +1,28 @@
+# FREE TEST DEPLOYMENT: no disk, data resets on every restart. Demo jobs are added automatically.
+# For real users, replace this file with render.paid.yaml (keeps the database on a disk).
 services:
   - type: web
     name: joblancer
     runtime: node
-    plan: starter            # a paid plan is needed so the database disk is kept between deploys
+    plan: free
     buildCommand: "echo no build step"
     startCommand: node server.js
     healthCheckPath: /healthz
-    disk:
-      name: joblancer-data
-      mountPath: /var/data
-      sizeGB: 1
     envVars:
       - key: NODE_VERSION
         value: 22
       - key: NODE_ENV
         value: production
       - key: DB_PATH
-        value: /var/data/joblancer.db
+        value: /tmp/joblancer.db
       - key: APP_SECRET
         generateValue: true
       - key: ADMIN_EMAIL
         sync: false
       - key: ADMIN_PASSWORD
         sync: false
-      # Test deployment settings. Change these before taking real users or real money (see README).
+      - key: SEED_DEMO
+        value: "1"
       - key: PAYMENTS
         value: mock
       - key: ALLOW_MOCK_PAYMENTS
@@ -31,4 +30,4 @@ services:
       - key: DEV_OTP
         value: "1"
       - key: PAN_AUTO_APPROVE
-        value: "0"
+        value: "1"
